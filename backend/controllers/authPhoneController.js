@@ -181,13 +181,16 @@ exports.loginWithPhone = async (req, res) => {
 
 exports.registerWithPhone = async (req, res) => {
   try {
-    const { name, phoneNumber, password, city, gender, dob } = req.body;
+    const { name, phoneNumber, email, password, city, gender, dob } = req.body;
 
-    if (!name || !phoneNumber || !password) {
-      return res.status(400).json({ message: "Name, phone number, and password are required" });
+    if (!name || !phoneNumber || !email || !password) {
+      return res.status(400).json({ message: "Name, phone number, email, and password are required" });
     }
     if (!/^[6-9]\d{9}$/.test(phoneNumber)) {
       return res.status(400).json({ message: "Please enter a valid 10-digit Indian mobile number" });
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.status(400).json({ message: "Please enter a valid email address" });
     }
     if (password.length < 6) {
       return res.status(400).json({ message: "Password must be at least 6 characters" });
@@ -196,7 +199,7 @@ exports.registerWithPhone = async (req, res) => {
     const existing = await User.findOne({ 
       $or: [
         { phoneNumber: phoneNumber },
-        { email: req.body.email || "---nonexistent---" }
+        { email: email }
       ]
     });
 
@@ -211,6 +214,7 @@ exports.registerWithPhone = async (req, res) => {
     let user;
     if (existing) {
       existing.name = name;
+      existing.email = email;
       existing.password = password;
       existing.city = city || existing.city;
       existing.gender = gender || existing.gender;
@@ -222,6 +226,7 @@ exports.registerWithPhone = async (req, res) => {
       user = new User({
         name,
         phoneNumber,
+        email,
         password,
         city: city || null,
         gender: gender || null,
@@ -377,5 +382,26 @@ exports.loginWithPassword = async (req, res) => {
   } catch (error) {
     console.error("Error in password login:", error);
     res.status(500).json({ message: "Login failed. Please try again.", error: error.message });
+  }
+};
+
+exports.checkUserExists = async (req, res) => {
+  try {
+    const { phoneNumber } = req.body;
+    
+    if (!phoneNumber || !/^[6-9]\d{9}$/.test(phoneNumber)) {
+      return res.status(400).json({ message: "Please enter a valid 10-digit phone number" });
+    }
+
+    const user = await User.findOne({ phoneNumber });
+    
+    res.status(200).json({ 
+      exists: !!user,
+      isPhoneVerified: user?.isPhoneVerified || false,
+      hasPassword: !!user?.password
+    });
+  } catch (error) {
+    console.error("Error checking user existence:", error);
+    res.status(500).json({ message: "Failed to check user. Please try again." });
   }
 };

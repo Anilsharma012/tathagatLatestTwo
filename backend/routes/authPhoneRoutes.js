@@ -8,5 +8,6 @@ router.post("/login-phone", authPhoneController.loginWithPhone);
 router.post("/register", authPhoneController.registerWithPhone);
 router.post("/verify-registration", authPhoneController.verifyRegistrationOtp);
 router.post("/login-password", authPhoneController.loginWithPassword);
+router.post("/check-user", authPhoneController.checkUserExists);
 
 module.exports = router;

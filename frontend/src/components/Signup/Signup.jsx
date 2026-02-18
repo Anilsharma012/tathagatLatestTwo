@@ -10,6 +10,7 @@ const Signup = ({ setUser }) => {
   const [step, setStep] = useState("details");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [city, setCity] = useState("");
@@ -25,6 +26,14 @@ const Signup = ({ setUser }) => {
 
   const otpRefs = useRef([]);
   const navigate = useNavigate();
+
+  // Check if mobile number is passed from login modal
+  React.useEffect(() => {
+    const state = navigate?.state || window.history?.state?.usr;
+    if (state?.phoneNumber) {
+      setPhone(state.phoneNumber);
+    }
+  }, [navigate]);
 
   const handlePostLoginRedirect = (serverRedirectTo) => {
     const pendingCourse = localStorage.getItem('pendingCourse');
@@ -63,6 +72,8 @@ const Signup = ({ setUser }) => {
 
     if (!name.trim()) { setError("Please enter your full name."); return; }
     if (!/^[6-9]\d{9}$/.test(phone)) { setError("Please enter a valid 10-digit Indian mobile number."); return; }
+    if (!email.trim()) { setError("Please enter your email address."); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setError("Please enter a valid email address."); return; }
     if (password.length < 6) { setError("Password must be at least 6 characters."); return; }
     if (password !== confirmPassword) { setError("Passwords do not match."); return; }
 
@@ -71,6 +82,7 @@ const Signup = ({ setUser }) => {
       await axios.post("/api/auth/phone/register", {
         name: name.trim(),
         phoneNumber: phone,
+        email: email.trim(),
         password,
         city: city.trim() || undefined,
         gender: gender || undefined,
@@ -106,6 +118,7 @@ const Signup = ({ setUser }) => {
       await axios.post("/api/auth/phone/register", {
         name: name.trim(),
         phoneNumber: phone,
+        email: email.trim(),
         password,
         city: city.trim() || undefined,
         gender: gender || undefined,
@@ -231,6 +244,14 @@ const Signup = ({ setUser }) => {
                       setPhone(val);
                     }}
                     maxLength={10}
+                  />
+
+                  <input
+                    type="email"
+                    placeholder="Email Address *"
+                    className="tlotp-input"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
 
                   <div style={{ position: 'relative' }}>

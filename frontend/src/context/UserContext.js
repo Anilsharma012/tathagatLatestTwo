@@ -25,8 +25,15 @@ const UserProvider = ({ children }) => {
     } catch {}
   };
 
+  const setUserWithStorage = (userData) => {
+    setUser(userData);
+    try {
+      localStorage.setItem("user", JSON.stringify(userData));
+    } catch {}
+  };
+
   return (
-    <UserContext.Provider value={{ user, updateUser }}>
+    <UserContext.Provider value={{ user, setUser: setUserWithStorage, updateUser }}>
       {children}
     </UserContext.Provider>
   );

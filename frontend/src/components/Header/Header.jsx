@@ -4,6 +4,7 @@ import { useState, useEffect, useContext } from "react"; // ⬅ useEffect add
 import "./Header.css";
 import logo from "../../images/tgLOGO.png";
 import { UserContext } from "../../context/UserContext";
+import MobileLogin from "../MobileLogin/MobileLogin";
 
 
 
@@ -30,9 +31,10 @@ import varcPdf from "../../images/100 RC.pdf";
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isMobileLoginOpen, setIsMobileLoginOpen] = useState(false);
   const location = useLocation();                     // ⬅ added
   const navigate = useNavigate();
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
 
   const closeMenu = () => {
     setIsMobileMenuOpen(false);
@@ -255,11 +257,12 @@ export default function Header() {
                   )}
                 </div>
               ) : (
-                <Link to="/Login" className="login-link">
-                  <button className="btn-orange">
-                    Log In
-                  </button>
-                </Link>
+                <button 
+                  className="btn-orange"
+                  onClick={() => setIsMobileLoginOpen(true)}
+                >
+                  Log In
+                </button>
               )}
             </div>
 
@@ -310,7 +313,12 @@ export default function Header() {
                       </button>
                     </div>
                   ) : (
-                    <Link to="/Login" className="mobile-login" onClick={closeMenu}>Log In</Link>
+                    <button 
+                      className="mobile-login" 
+                      onClick={() => setIsMobileLoginOpen(true)}
+                    >
+                      Log In
+                    </button>
                   )}
                 </div>
               </nav>
@@ -318,6 +326,12 @@ export default function Header() {
           )}
         </div>
       </div>
+      
+      <MobileLogin 
+        isOpen={isMobileLoginOpen}
+        onClose={() => setIsMobileLoginOpen(false)}
+        setUser={setUser}
+      />
     </header>
   );
 }

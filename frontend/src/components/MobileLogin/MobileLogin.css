@@ -1,0 +1,389 @@
+.mobile-login-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.mobile-login-modal {
+  background: white;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  position: relative;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.mobile-login-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+  color: #666;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.mobile-login-close:hover {
+  background: #f5f5f5;
+  color: #333;
+}
+
+.mobile-login-left {
+  flex: 1;
+  background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+  padding: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 500px;
+}
+
+.mobile-login-logo {
+  text-align: center;
+  color: white;
+}
+
+.mobile-login-logo img {
+  width: 120px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.mobile-login-tagline {
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+  opacity: 0.9;
+}
+
+.mobile-login-right {
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 500px;
+}
+
+.mobile-login-form {
+  width: 100%;
+  max-width: 320px;
+}
+
+.mobile-login-header {
+  text-align: center;
+  margin-bottom: 30px;
+  position: relative;
+}
+
+.back-btn {
+  position: absolute;
+  left: -10px;
+  top: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+  padding: 8px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+}
+
+.back-btn:hover {
+  background: #f5f5f5;
+  color: #333;
+}
+
+.mobile-login-header h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 8px 0;
+}
+
+.mobile-login-header p {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.mobile-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.mobile-input:focus {
+  outline: none;
+  border-color: #ff6b35;
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+.otp-input-container {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.otp-digit-input {
+  width: 50px;
+  height: 55px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: 600;
+  text-align: center;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.otp-digit-input:focus {
+  outline: none;
+  border-color: #ff6b35;
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .mobile-login-modal {
+    width: 98%;
+    border-radius: 8px;
+  }
+
+  .mobile-login-left,
+  .mobile-login-right {
+    padding: 20px 15px;
+  }
+
+  .otp-digit-input {
+    width: 40px;
+    height: 45px;
+    font-size: 18px;
+  }
+
+  .otp-input-container {
+    gap: 8px;
+  }
+}
+
+.mobile-login-btn {
+  width: 100%;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 20px;
+}
+
+.mobile-login-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+}
+
+.mobile-login-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.error-message {
+  background: #fee;
+  color: #d63031;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-bottom: 16px;
+  border: 1px solid #fcc;
+}
+
+.mobile-login-footer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.mobile-login-footer p {
+  color: #666;
+  font-size: 14px;
+  margin: 0;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: #ff6b35;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.link-btn:hover {
+  color: #e55a2b;
+}
+
+.resend-section {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.resend-section p {
+  color: #666;
+  font-size: 14px;
+  margin: 0 0 8px 0;
+}
+
+.resend-btn {
+  background: none;
+  border: none;
+  color: #ff6b35;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  font-size: 14px;
+  text-decoration: underline;
+  transition: all 0.2s ease;
+}
+
+.resend-btn:hover:not(:disabled) {
+  color: #e55a2b;
+}
+
+.resend-btn:disabled {
+  color: #ccc;
+  cursor: not-allowed;
+  text-decoration: none;
+}
+
+.existing-user-message {
+  padding: 40px;
+  text-align: center;
+  width: 100%;
+}
+
+.existing-user-message h3 {
+  color: #333;
+  margin-bottom: 16px;
+  font-size: 20px;
+}
+
+.existing-user-message p {
+  color: #666;
+  margin-bottom: 24px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .mobile-login-modal {
+    width: 95%;
+    max-height: 95vh;
+    flex-direction: column;
+  }
+
+  .mobile-login-left {
+    min-height: auto;
+    padding: 30px 20px;
+  }
+
+  .mobile-login-logo img {
+    width: 80px;
+    margin-bottom: 15px;
+  }
+
+  .mobile-login-tagline {
+    font-size: 14px;
+  }
+
+  .mobile-login-right {
+    min-height: auto;
+    padding: 30px 20px;
+  }
+
+  .mobile-login-form {
+    max-width: 100%;
+  }
+
+  .mobile-login-header h2 {
+    font-size: 20px;
+  }
+
+  .mobile-login-header p {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .mobile-login-modal {
+    width: 98%;
+    border-radius: 8px;
+  }
+
+  .mobile-login-left,
+  .mobile-login-right {
+    padding: 20px 15px;
+  }
+
+  .mobile-login-logo img {
+    width: 60px;
+  }
+
+  .mobile-login-tagline {
+    font-size: 12px;
+  }
+
+  .mobile-login-header h2 {
+    font-size: 18px;
+  }
+
+  .mobile-login-header p {
+    font-size: 12px;
+  }
+
+  .mobile-input,
+  .otp-input {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  .mobile-login-btn {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+}

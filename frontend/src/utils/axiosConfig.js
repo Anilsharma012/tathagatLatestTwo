@@ -3,7 +3,7 @@ import axios from "axios";
 const API_BASE =
   window.__API_BASE_URL__ ||
   process.env.REACT_APP_API_URL ||
-  "";
+  "http://localhost:8000";
 
 axios.defaults.baseURL = API_BASE.replace(/\/$/, "");
 axios.defaults.withCredentials = true;
