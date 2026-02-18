@@ -114,7 +114,7 @@ exports.verifyPhoneOtp = async (req, res) => {
     let redirectTo = "/student/dashboard";
     if (!user.isOnboardingComplete) {
       redirectTo = "/user-details";
-    } else if (!user.name || !user.email) {
+    } else if (!user.name || !user.email || !user.selectedExam) {
       redirectTo = "/user-details";
     }
 
@@ -193,9 +193,17 @@ exports.registerWithPhone = async (req, res) => {
       return res.status(400).json({ message: "Password must be at least 6 characters" });
     }
 
-    const existing = await User.findOne({ phoneNumber });
-    if (existing && existing.isPhoneVerified && existing.password) {
-      return res.status(400).json({ message: "Account already exists. Please login." });
+    const existing = await User.findOne({ 
+      $or: [
+        { phoneNumber: phoneNumber },
+        { email: req.body.email || "---nonexistent---" }
+      ]
+    });
+
+    if (existing) {
+      if (existing.isPhoneVerified && existing.password) {
+        return res.status(400).json({ message: "Account already exists with this phone or email. Please login." });
+      }
     }
 
     const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
@@ -295,16 +303,17 @@ exports.verifyRegistrationOtp = async (req, res) => {
     await OTP.deleteOne({ _id: otpRecord._id });
 
     user.isPhoneVerified = true;
-    user.isOnboardingComplete = true;
+    // Do NOT set isOnboardingComplete = true here, let the frontend handle the flow
     await user.save({ validateBeforeSave: false });
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET || "default_secret_key", { expiresIn: "30d" });
-
+    
+    // Redirect to onboarding/details first
     res.status(200).json({
       message: "Registration successful!",
       token,
       user: { _id: user._id, name: user.name, phoneNumber: user.phoneNumber, email: user.email },
-      redirectTo: "/student/dashboard",
+      redirectTo: "/user-details",
     });
   } catch (error) {
     console.error("Error verifying registration OTP:", error);
@@ -345,7 +354,11 @@ exports.loginWithPassword = async (req, res) => {
       return res.status(401).json({ message: "Invalid password. Please try again." });
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET || "default_secret_key", { expiresIn: "30d" });
+    // Determine redirect based on user profile completion
+    let redirectTo = "/student/dashboard";
+    if (!user.isOnboardingComplete || !user.selectedExam || !user.name || !user.email) {
+      redirectTo = "/user-details";
+    }
 
     res.status(200).json({
       message: "Login successful!",
@@ -359,7 +372,7 @@ exports.loginWithPassword = async (req, res) => {
         isOnboardingComplete: user.isOnboardingComplete,
         city: user.city,
       },
-      redirectTo: "/student/dashboard",
+      redirectTo,
     });
   } catch (error) {
     console.error("Error in password login:", error);

@@ -143,7 +143,8 @@ const Signup = ({ setUser }) => {
       setToastMessage("Registration successful! Welcome to TathaGat!");
 
       setTimeout(() => {
-        handlePostLoginRedirect(response.data.redirectTo);
+        // Force redirect to onboarding for new signups
+        navigate('/user-details');
       }, 1500);
     } catch (err) {
       const msg = err?.response?.data?.message || "OTP verification failed. Please try again.";
