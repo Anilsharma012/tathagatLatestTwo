@@ -1,8 +1,13 @@
-import { Link, useLocation } from "react-router-dom"; // ⬅ useLocation add
-import { Phone, Mail, Facebook, Instagram, Youtube, Menu, X } from "lucide-react";
-import { useState, useEffect } from "react"; // ⬅ useEffect add
+import { Link, useLocation, useNavigate } from "react-router-dom"; // ⬅ useLocation add
+import { Phone, Mail, Facebook, Instagram, Youtube, Menu, X, LogOut, User } from "lucide-react";
+import { useState, useEffect, useContext } from "react"; // ⬅ useEffect add
 import "./Header.css";
 import logo from "../../images/tgLOGO.png";
+import { UserContext } from "../../context/UserContext";
+
+
+
+// ⬇ Apne images folder ke actual paths use karo
 
 
 
@@ -24,12 +29,26 @@ import varcPdf from "../../images/100 RC.pdf";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const location = useLocation();                     // ⬅ added
-  const closeMenu = () => setIsMobileMenuOpen(false); // ⬅ added
+  const navigate = useNavigate();
+  const { user } = useContext(UserContext);
+
+  const closeMenu = () => {
+    setIsMobileMenuOpen(false);
+    setIsUserMenuOpen(false);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("user");
+    window.location.reload();
+  };
 
   // Route change par hamesha menu band rahe
   useEffect(() => {
     setIsMobileMenuOpen(false);
+    setIsUserMenuOpen(false);
   }, [location.pathname]);
  
   return (
@@ -203,11 +222,45 @@ export default function Header() {
                   Join Us Today
                 </button>
               </Link>
-              <Link to="/Login" className="login-link">
-                <button className="btn-orange">
-                  Log In
-                </button>
-              </Link>
+              
+              {user ? (
+                <div className="user-profile-container">
+                  <button 
+                    className="user-profile-btn"
+                    onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                  >
+                    <img 
+                      src={user.profileImage || `https://ui-avatars.com/api/?name=${user.name || 'User'}&background=FF6B35&color=fff`} 
+                      alt="User" 
+                      className="user-avatar-img"
+                    />
+                  </button>
+                  
+                  {isUserMenuOpen && (
+                    <div className="user-dropdown-menu">
+                      <div className="user-info-header">
+                        <p className="user-name">{user.name}</p>
+                        <p className="user-email">{user.email || user.mobile}</p>
+                      </div>
+                      <hr className="dropdown-divider" />
+                      <Link to="/student/dashboard" className="dropdown-item">
+                        <User size={16} />
+                        <span>Dashboard</span>
+                      </Link>
+                      <button onClick={handleLogout} className="dropdown-item logout-btn">
+                        <LogOut size={16} />
+                        <span>Logout</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <Link to="/Login" className="login-link">
+                  <button className="btn-orange">
+                    Log In
+                  </button>
+                </Link>
+              )}
             </div>
 
             {/* Mobile Menu Button */}
@@ -241,7 +294,24 @@ export default function Header() {
                       Join Us Today
                     </button>
                   </Link>
-                  <Link to="/Login" className="mobile-login" onClick={closeMenu}>Log In</Link>
+                  
+                  {user ? (
+                    <div className="mobile-user-actions">
+                       <div className="mobile-user-info">
+                        <img 
+                          src={user.profileImage || `https://ui-avatars.com/api/?name=${user.name || 'User'}&background=FF6B35&color=fff`} 
+                          alt="User" 
+                          className="mobile-avatar-img"
+                        />
+                        <span>{user.name}</span>
+                      </div>
+                      <button onClick={handleLogout} className="mobile-logout-link">
+                        Logout
+                      </button>
+                    </div>
+                  ) : (
+                    <Link to="/Login" className="mobile-login" onClick={closeMenu}>Log In</Link>
+                  )}
                 </div>
               </nav>
             </div>
